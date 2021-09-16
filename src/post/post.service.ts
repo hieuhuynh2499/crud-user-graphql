@@ -6,17 +6,16 @@ import { Post } from './entity/post.entity';
 
 @Injectable()
 export class PostService {
+  constructor(
+    @InjectRepository(Post) private postRepository: Repository<Post>,
+  ) {}
 
+  async create(createPostInput: CreatePostInput): Promise<Post> {
+    let newPost = this.postRepository.create(createPostInput);
+    return await this.postRepository.save(newPost);
+  }
 
-    constructor(@InjectRepository(Post) private postRepository: Repository<Post>){}
-    
-    async create(createPostInput:CreatePostInput):Promise<Post>{
-        let newPost = this.postRepository.create(createPostInput)
-        return this.postRepository.save(newPost)
-    }
-
-    async findAll():Promise<Post[]>{
-        return this.postRepository.find()
-    }
-
+  async findAll(): Promise<Post[]> {
+    return await this.postRepository.find();
+  }
 }

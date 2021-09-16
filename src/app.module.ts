@@ -1,25 +1,27 @@
 import { Module } from '@nestjs/common';
-import { UserModule } from './user/user.module';
-import { PostModule } from './post/post.module';
-import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
+import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { UserModule } from './user/user.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
-    UserModule, 
+    UserModule,
     PostModule,
-    GraphQLModule.forRoot({ autoSchemaFile: join(process.cwd(), 'src/schema.gql'),}),
+    GraphQLModule.forRoot({
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    }),
     TypeOrmModule.forRoot({
-      type:'postgres',
-      host: 'localhost',
-      port:5432,
-      username:'postgres',
-      password:'root',
-      database:'users',
-      entities:["dist/**/*.entity{.ts,.js}"],
-      synchronize:true
+      type: 'postgres',
+      host: process.env.POSTGRES_HOST,
+      port: parseInt(process.env.POSTGRES_PORT),
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DATABASE,
+      entities: ['dist/**/*.entity{.ts,.js}'],
+      synchronize: true,
     }),
   ],
   controllers: [],

@@ -11,7 +11,7 @@ type Post {
 }
 
 type User {
-  userId: String!
+  id: String!
   userName: String!
   age: Int
   address: String

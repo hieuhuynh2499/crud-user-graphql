@@ -6,17 +6,18 @@ import { User } from './entity/user.entity';
 
 @Injectable()
 export class UserService {
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
 
-    constructor(@InjectRepository(User) private userRepository:Repository<User>){}
+  async create(createUserInput: CreateUserInput): Promise<User> {
+    let newUser = this.userRepository.create(createUserInput);
+    return await this.userRepository.save(newUser);
+  }
 
-    async create(createUserInput:CreateUserInput):Promise<User>{
-        let newUser = this.userRepository.create(createUserInput);
-        return this.userRepository.save(newUser);
-    }
-
-    async findAll(): Promise<User[]>{
-        return this.userRepository.find({
-            relations: ["posts"]
-          })
-    }
+  async findAll(): Promise<User[]> {
+    return await this.userRepository.find({
+      relations: ['posts'],
+    });
+  }
 }

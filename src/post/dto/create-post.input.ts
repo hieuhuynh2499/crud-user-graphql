@@ -1,15 +1,13 @@
-import { Field, InputType } from "@nestjs/graphql";
-
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class CreatePostInput{
+export class CreatePostInput {
+  @Field()
+  postTitle: string;
 
-    @Field()
-    postTitle:string
+  @Field(() => String)
+  postContent: string;
 
-    @Field(()=>String)
-    postContent:string
-
-    @Field(()=>String)
-    userId:string
+  @Field(() => String)
+  userId: string;
 }
