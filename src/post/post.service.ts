@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreatePostInput } from './dto/create-post.input';
+import { UpdatePostInput } from './dto/update-post.input';
 import { Post } from './entity/post.entity';
 
 @Injectable()
@@ -17,5 +18,16 @@ export class PostService {
 
   async findAll(): Promise<Post[]> {
     return await this.postRepository.find();
+  }
+
+  async update(
+    id: string,
+    updatePostInput: UpdatePostInput,
+  ): Promise<UpdateResult> {
+    return await this.postRepository.update(id, updatePostInput);
+  }
+
+  async delete(id: string) {
+    return await this.postRepository.delete(id);
   }
 }
