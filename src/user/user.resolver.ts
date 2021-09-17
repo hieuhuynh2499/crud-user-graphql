@@ -29,6 +29,7 @@ export class UserResolver {
 
   @Mutation(() => User, { name: 'deleteUser' })
   delete(@Args('id') id: string) {
-    return this.userService.delete(id);
+    const userDelete = this.userService.delete(id);
+    return userDelete
   }
 }

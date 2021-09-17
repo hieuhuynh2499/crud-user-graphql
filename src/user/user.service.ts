@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
@@ -22,13 +22,31 @@ export class UserService {
     });
   }
 
+  // async update(
+  //   id: string,
+  //   updateUserInput: UpdateUserInput,
+  // ): Promise<UpdateResult> {
+  //   console.log(id)
+  //   return await this.userRepository.update(id, updateUserInput);
+  // }
   async update(
     id: string,
     updateUserInput: UpdateUserInput,
-  ): Promise<UpdateResult> {
-    return await this.userRepository.update(id, updateUserInput);
+  ): Promise<User> {
+   const userUpdate = await this.userRepository.findOne(id);
+    userUpdate.userName = updateUserInput.userName;
+    userUpdate.age = updateUserInput.age;
+    userUpdate.address = updateUserInput.address;
+    return await this.userRepository.save(userUpdate);
   }
-  async delete(id: string): Promise<DeleteResult> {
-    return await this.userRepository.delete(id);
+  async delete(id: string): Promise<User> {
+    const userDelete = await this.userRepository.findOne(id);
+    if(userDelete) {
+    let res =   await this.userRepository.delete(userDelete);
+      if (res.affected === 1) {
+        return userDelete;
+      }
+    }
+    throw new NotFoundException(`Record cannot find by id ${id}`)
   }
 }

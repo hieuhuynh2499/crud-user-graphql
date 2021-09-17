@@ -25,10 +25,20 @@ type Query {
 
 type Mutation {
   createUserNew(createUser: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!, id: String!): User!
+  deleteUser(id: String!): User!
   createPostNew(createPost: CreatePostInput!): Post!
+  updatePost(updatePostInput: UpdatePostInput!, id: String!): Post!
+  deletePost(id: String!): Post!
 }
 
 input CreateUserInput {
+  userName: String!
+  age: Float!
+  address: String!
+}
+
+input UpdateUserInput {
   userName: String!
   age: Float!
   address: String!
@@ -38,4 +48,9 @@ input CreatePostInput {
   postTitle: String!
   postContent: String!
   userId: String!
+}
+
+input UpdatePostInput {
+  postTitle: String!
+  postContent: String!
 }
