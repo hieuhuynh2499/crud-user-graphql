@@ -8,7 +8,13 @@ type Post {
   postContent: String!
   user: User!
   userId: String!
+  deleteDate: DateTime!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type User {
   id: String!
@@ -25,10 +31,21 @@ type Query {
 
 type Mutation {
   createUserNew(createUser: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!, id: String!): User!
+  deleteUser(id: String!): User!
   createPostNew(createPost: CreatePostInput!): Post!
+  updatePost(updatePostInput: UpdatePostInput!, id: String!): Post!
+  deletePost(id: String!): Post!
+  restorePost(id: String!): Post!
 }
 
 input CreateUserInput {
+  userName: String!
+  age: Float!
+  address: String!
+}
+
+input UpdateUserInput {
   userName: String!
   age: Float!
   address: String!
@@ -38,4 +55,9 @@ input CreatePostInput {
   postTitle: String!
   postContent: String!
   userId: String!
+}
+
+input UpdatePostInput {
+  postTitle: String!
+  postContent: String!
 }

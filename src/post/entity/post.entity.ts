@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { User } from 'src/user/entity/user.entity';
 
@@ -25,4 +25,9 @@ export class Post {
   @Field()
   @Column({ type: 'uuid' })
   userId: string;
+
+  @Field()
+  @Column({ type:'date' })
+  @DeleteDateColumn()
+  deleteDate:Date;
 }

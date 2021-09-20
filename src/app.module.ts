@@ -2,12 +2,14 @@ import { Module } from '@nestjs/common';
 import { join } from 'path';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     UserModule,
     PostModule,
     GraphQLModule.forRoot({

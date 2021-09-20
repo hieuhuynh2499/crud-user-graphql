@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
+import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entity/user.entity';
 
 @Injectable()
@@ -19,5 +20,36 @@ export class UserService {
     return await this.userRepository.find({
       relations: ['posts'],
     });
+  }
+
+  // async update(
+  //   id: string,
+  //   updateUserInput: UpdateUserInput,
+  // ): Promise<UpdateResult> {
+  //   console.log(id)
+  //   return await this.userRepository.update(id, updateUserInput);
+  // }
+
+  async update(
+    id: string,
+    updateUserInput: UpdateUserInput,
+  ): Promise<User> {
+    const userUpdate = await this.userRepository.findOne(id);
+    userUpdate.userName = updateUserInput.userName;
+    userUpdate.age = updateUserInput.age;
+    userUpdate.address = updateUserInput.address;
+    return await this.userRepository.save(userUpdate);
+  }
+  
+  async delete(id: string): Promise<User> {
+    const userDelete = await this.userRepository.findOne(id);
+    if(userDelete) {
+    let res =  await this.userRepository.delete(userDelete);
+      console.log(res)
+      if (res.affected === 1) {
+        return userDelete;
+      }
+    }
+    throw new NotFoundException(`Record cannot find by id ${id}`)
   }
 }
