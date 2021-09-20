@@ -8,7 +8,13 @@ type Post {
   postContent: String!
   user: User!
   userId: String!
+  deleteDate: DateTime!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type User {
   id: String!
@@ -30,6 +36,7 @@ type Mutation {
   createPostNew(createPost: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!, id: String!): Post!
   deletePost(id: String!): Post!
+  restorePost(id: String!): Post!
 }
 
 input CreateUserInput {

@@ -1,3 +1,4 @@
+import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { CreatePostInput } from './dto/create-post.input';
@@ -9,6 +10,7 @@ import { PostService } from './post.service';
 export class PostResolver {
   constructor(private postService: PostService) {}
   @Mutation(() => Post, { name: 'createPostNew' })
+  @UsePipes(ValidationPipe)
   create(@Args('createPost') createPostInput: CreatePostInput) {
     return this.postService.create(createPostInput);
   }
@@ -19,6 +21,7 @@ export class PostResolver {
   }
 
   @Mutation(() => Post, { name: 'updatePost' })
+  @UsePipes(ValidationPipe)
   update(
     @Args('id') id: string,
     @Args('updatePostInput') updatePostInput: UpdatePostInput,
@@ -29,5 +32,10 @@ export class PostResolver {
   @Mutation(() => Post, { name: 'deletePost' })
   delete(@Args('id') id: string) {
     return this.postService.delete(id);
+  }
+
+  @Mutation(() => Post,{name:'restorePost'})
+  restore(@Args('id') id: string){
+    return this.postService.restore(id);
   }
 }

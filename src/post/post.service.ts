@@ -20,21 +20,59 @@ export class PostService {
     return await this.postRepository.find();
   }
 
-  async update(id: string, updatePostInput: UpdatePostInput): Promise<Post> {
-    const postUpdate = await this.postRepository.findOne(id);
-    postUpdate.postTitle = updatePostInput.postTitle;
-    postUpdate.postContent = updatePostInput.postContent;
-    return await this.postRepository.save(postUpdate);
-  }
+  // async update(id: string, updatePostInput: UpdatePostInput): Promise<Post> {
+  //   const postUpdate = await this.postRepository.findOne(id);
+  //   postUpdate.postTitle = updatePostInput.postTitle;
+  //   postUpdate.postContent = updatePostInput.postContent;
+  //   return await this.postRepository.save(postUpdate);
+  // }
 
-  async delete(id: string) {
-    const postDelete = await this.postRepository.findOne(id);
-    if (postDelete) {
-      let res = await this.postRepository.delete(postDelete);
-      if (res.affected === 1) {
-        return postDelete;
+  async update(id: string, updatePostInput: UpdatePostInput): Promise<Post> {
+    const post = await this.postRepository.findOne(id);
+    if(post){
+      const resPostUpdate = await this.postRepository.update(id,{
+        postTitle: updatePostInput.postTitle,
+        postContent: updatePostInput.postContent,
+      });
+      const postUpdate = await this.postRepository.findOne(id);
+      if(resPostUpdate.affected === 1){
+        return postUpdate
       }
     }
     throw new NotFoundException(`Record cannot find by id ${id}`);
   }
+
+  // async delete(id: string):Promise<Post> {
+  //   const postDelete = await this.postRepository.findOne(id);
+  //   if (postDelete) {
+  //     console.log("dfkjghdkfg")
+  //     let res = await this.postRepository.delete(postDelete);
+  //     console.log(res)
+  //     if (res.affected === 1) {
+  //       return postDelete;
+  //     }
+  //   }
+  //   throw new NotFoundException(`Record cannot find by id ${id}`);
+  // }
+  
+  async delete(id: string):Promise<Post> {
+      const postDelete = await this.postRepository.findOne(id);
+      let res = await this.postRepository.softDelete(id);
+      if(res.affected === 1){
+        return postDelete;
+      }else{
+        throw new NotFoundException('not found id post')
+      }
+  } 
+
+  async restore(id:string): Promise<Post> {
+    const postDelete = await this.postRepository.findOne(id);
+      let res = await this.postRepository.restore(id);
+      if(res.affected === 1){
+        return postDelete;
+      }else{
+        throw new NotFoundException('not found id post')
+      }
+  }
+
 }
